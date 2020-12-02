@@ -10,8 +10,8 @@ os.chdir(directory)
 
 # Define commands here
 testCommand = 'ls'
-arduinoAddress = '/dev/cu.usbmodem1434301';
-arduinoSetUp = 'stty -f '+ arduinoAddress +' raw 38400 -hupcl & cat /dev/cu.usbmodem1434301' #Make sure that the address correspond that shown in the arduino IDE
+arduinoAddress = '/dev/cu.usbmodem14322401';
+arduinoSetUp = 'stty -f '+ arduinoAddress +' raw 38400 -hupcl & cat /dev/cu.usbmodem14322401' #Make sure that the address correspond that shown in the arduino IDE
 
 # Open new terminal window to read the arduino
 print("Opening new terminal window to read the arduino...")
@@ -55,7 +55,7 @@ elif confirmInput == 'n':
 
 # Ask user for initial inputs to set up the flow rate
 flowIn = input("Set the flow rate in slm (dafault is 1.5)")
-os.system("echo \"q,"+str(flowIn)+"\" > /dev/cu.usbmodem1434301")
+os.system("echo \"q,"+str(flowIn)+"\" > /dev/cu.usbmodem14322401")
 
 # Open new terminal window to execute any additional python scripts
 os.chdir(directory)
