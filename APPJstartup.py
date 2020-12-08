@@ -10,58 +10,55 @@ os.chdir(directory)
 
 # Define commands here
 testCommand = 'ls'
-arduinoAddress = '/dev/cu.usbmodem14322401';
-arduinoSetUp = 'stty -f '+ arduinoAddress +' raw 38400 -hupcl & cat /dev/cu.usbmodem14322401' #Make sure that the address correspond that shown in the arduino IDE
+arduinoAddress = '/dev/cu.usbmodem1413401';
+arduinoSetUp = 'stty -f '+ arduinoAddress +' raw 38400 -hupcl & cat '+arduinoAddress #Make sure that the address correspond that shown in the arduino IDE
 
 # Open new terminal window to read the arduino
 print("Opening new terminal window to read the arduino...")
 time.sleep(1)
 tell.app( 'Terminal', 'do script "' + arduinoSetUp + '"')
+time.sleep(3)
 print("...Done")
+
+
+# Set the default values
+dutyCycleIn = 100;
+powerIn = 2;
+flowIn = 1.5;
+
+time.sleep(0.5)
+print("Setting duty cycle to " + str(dutyCycleIn) + " %" )
+os.system("echo \"p,"+str(dutyCycleIn)+"\" > "+ arduinoAddress)
+time.sleep(0.5)
+print("Setting power to " + str(powerIn) + " W")
+os.system("echo \"w,"+str(powerIn)+"\" > " + arduinoAddress)
+time.sleep(0.5)
+print("Setting flow rate to " + str(flowIn) + " slm")
+os.system("echo \"q,"+str(flowIn)+"\" > " + arduinoAddress)
 time.sleep(0.5)
 
-confirmInput = input(">>> Is the Arduino being read correctly? [y/n]")
-while (confirmInput!='y' and confirmInput!='n'):
-	print("Invalid answer")
-	confirmInput = input(">>> Is the Arduino being read correctly? [y/n]")
-	print(confirmInput)
+quit = False
+while(quit==False):
+	try:
+		time.sleep(0.2)
+		stringInput = input(">> Set desired values of power and flow as P,q (type quit to exit): ")
+		powerIn, flowIn = stringInput.split(',')
+		if(powerIn!=-1 and flowIn!=-1):
+			os.system("echo \"w,"+str(powerIn)+"\" > " + arduinoAddress)
+			time.sleep(0.1)
+			os.system("echo \"q,"+str(flowIn)+"\" > " + arduinoAddress)
+			print("Inputs sent! P = " + str(powerIn)+ " and q = " + str(flowIn))	
+	except:
+		if(stringInput=="quit"):
+			quit=True
+		else:
+			print("Invalid input. Pass two inputs separated by a comma.")
+			pass
 
-if confirmInput == 'y':
-	print('\n')
-elif confirmInput == 'n':
-	print('\nRESET ARDUINO AND TROUBLESHOOT! (Common cause for not reading the Arduino properly is an incorrectly set baud rate. Make sure it is at 38400)')
-	exit()
-
-# Ask user for initial inputs to set up the power
-dutyCycleIn = input("Set the duty cycle % (dafault is 100)")
-print("echo \"p,"+str(dutyCycleIn)+"\" > "+ arduinoAddress)
-os.system("echo \"p,"+str(dutyCycleIn)+"\" > "+ arduinoAddress)
-powerIn = input("Set the power in Watts (dafault is 2)")
-os.system("echo \"w,"+str(powerIn)+"\" > " + arduinoAddress)
-
-# Check that the oscilloscope is indicating the correct readings
-confirmInput = input(">>> Is the oscilloscope showing a waveform? [y/n]")
-while (confirmInput!='y' and confirmInput!='n'):
-	print("Invalid answer")
-	confirmInput = input(">>> Is the oscilloscope showing a waveform? [y/n]")
-	print(confirmInput)
-if confirmInput == 'y':
-	print('\n')
-elif confirmInput == 'n':
-	os.system("echo \"p,"+str(0)+"\" > "+ arduinoAddress)
-	os.system("echo \"w,"+str(0)+"\" > "+ arduinoAddress)
-	print('\nRESET ARDUINO AND TROUBLESHOOT!')
-	exit()
-
-# Ask user for initial inputs to set up the flow rate
-flowIn = input("Set the flow rate in slm (dafault is 1.5)")
-os.system("echo \"q,"+str(flowIn)+"\" > /dev/cu.usbmodem14322401")
-
-# Open new terminal window to execute any additional python scripts
 os.chdir(directory)
-print("############################################################################################################################################################################################")
+print("\n##########################################################################################################################################################################################")
 print("MAKE SURE TO STOP READING THE ARDUINO FROM THE SECOND TERMINAL WINDOW BEFORE EXECUTING ANY PYTHON SCRIPTS (CNTRL+C)! YOU CANNOT READ THE ARDUINO FROM TWO DIFFERENT PLACES AT THE SAME TIME!")
-print("############################################################################################################################################################################################")
+print("##########################################################################################################################################################################################\n")
 
 
 
