@@ -34,7 +34,7 @@ timeStamp = datetime.now().strftime('%Y_%m_%d_%H'+'h%M''m%S'+'s')
 ##################################################################################################################################################
 # USER INPUTS
 ##################################################################################################################################################
-arduinoAddress = '/dev/cu.usbmodem1413401'
+arduinoAddress = '/dev/cu.usbmodem1434401'
 # Move constants to APPJConstants.py file so that they are separate!
 dutyCycle = 100
 tSampling = 0.5		#in seconds

@@ -10,7 +10,7 @@ os.chdir(directory)
 
 # Define commands here
 testCommand = 'ls'
-arduinoAddress = '/dev/cu.usbmodem1413401';
+arduinoAddress = '/dev/cu.usbmodem1434401';
 arduinoSetUp = 'stty -f '+ arduinoAddress +' raw 38400 -hupcl & cat '+arduinoAddress #Make sure that the address correspond that shown in the arduino IDE
 
 # Open new terminal window to read the arduino
